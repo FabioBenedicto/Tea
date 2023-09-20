@@ -2,11 +2,10 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        height: 60,
+        padding: 16,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10,
-        marginBottom: 40,
     },
     text: {
         fontFamily: 'Inter_700Bold',

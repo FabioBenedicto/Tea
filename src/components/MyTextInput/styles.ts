@@ -2,8 +2,6 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        position: "relative",
-        marginBottom: 40,
         flexDirection: 'row', 
         alignItems: 'center',
     },
@@ -13,7 +11,7 @@ export const styles = StyleSheet.create({
     },
     innerContainer: {
         position: 'relative', 
-        flex: 1
+        flex: 1,
     },
     textInput: {
         width: '100%',

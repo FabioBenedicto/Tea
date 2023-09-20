@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
         height: 120,
 
     },
-    touchable: {
+    innerContainer: {
         width: '100%',
         height: '100%',
         justifyContent: 'center',

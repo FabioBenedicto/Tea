@@ -1,20 +1,23 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const styles = StyleSheet.create({
-    container: {
+    innerContainer: {
         flex: 1,
-        backgroundColor: '#FFF',
+        paddingHorizontal: 24,
     },
     header: {
         backgroundColor: '#A3B1F1',
         height: 120,
+        marginHorizontal: -24,
+        paddingLeft: 24,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         justifyContent: 'center',
     },
     main: {
-        paddingHorizontal: 24,
         marginTop: -40,
+        gap: 40,
     },
     profile:{
         alignItems: 'center',
@@ -29,17 +32,11 @@ export const styles = StyleSheet.create({
         fontFamily: 'Inter_700Bold',
         fontSize: 20,
         color: '#333333',
-        marginBottom: 40,
     },
-    annotations: {
-        backgroundColor: 'white',
-        justifyContent: 'flex-start',
-        borderWidth: 2,
-        borderColor: '#A3B1F1',
-        borderRadius: 10,
-        padding: 8,
-        marginBottom: 40,
+    profileSubtext: {
+        fontFamily: 'Inter_400Regular',
         fontSize: 16,
+        color: '#666666',
     },
     textArea: {
         position: "relative",
@@ -57,12 +54,17 @@ export const styles = StyleSheet.create({
         fontFamily: 'Inter_700Bold',
         fontSize: 16,
         marginBottom: 10,
+        color: "#666666"
     },
     placeholderInput: {
         position: 'absolute',
         top: -20,
         fontFamily: 'Inter_700Bold',
         fontSize: 16,
+    },
+    subtext: {
+        marginLeft: 40,
+        marginTop: -30,
     },
     testinho: {
         fontFamily: 'Inter_400Regular',

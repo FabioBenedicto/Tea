@@ -1,138 +1,131 @@
-import React, { useRef, useState } from "react";
-import {
-    SafeAreaView,
-    View,
-    Text,
-    Pressable,
-    TextInput,
-    Switch,
-    Platform,
-    Keyboard,
-    TouchableWithoutFeedback,
-    KeyboardAvoidingView
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 
-import Animated, { useSharedValue, Easing, withTiming } from "react-native-reanimated";
-
-import { User, LockKey } from "phosphor-react-native";
+import { Container } from "../../components/Container";
+import { MyTextInput } from "../../components/MyTextInput";
+import { MySwitch } from "../../components/MySwitch";
+import { MyButton } from "../../components/MyButton";
 
 import { styles } from "./styles";
-import { Button } from "../../components/Button";
 
-export function LoginScreen() {
-    const [email, setEmail] = useState<string>();
-    const [password, setPassword] = useState<string>();
-    const [backgroundColor, setBackgroundColor] = useState<string>('#FF8989');
-    const [isVisible, setIsVisible] = useState<boolean>();
+import { User, LockKey } from "phosphor-react-native";
+import Animated, { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 
-    const AnimatedText = Animated.createAnimatedComponent(Text);
-    const PlaceholderEmailBottom = useSharedValue<any>(8);
-    const PlaceholderPasswordBottom = useSharedValue<any>(8);
 
-    const textInputEmailRef = useRef<TextInput>(null);
-    const textInputPasswordRef = useRef<TextInput>(null);
+export function LoginScreen({ navigation, route }) {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
-    const movePlaceholderUp = (sharedValue: any, ref: any) => {
-        sharedValue.value = withTiming(40, { duration: 100, easing: Easing.linear });
-        ref.current?.focus();
+    const opacity = useSharedValue<any>(1);
+
+    const handleChangeEmail = (text: string) => {
+        setEmail(text);
     }
 
-    const movePlaceholderDown = (sharedValue: any, value: string | undefined) => {
-        if (!value) {
-            sharedValue.value = withTiming(10, { duration: 100, easing: Easing.linear });
+    const handleChangePassword = (text: string) => {
+        setPassword(text);
+    }
+
+    const handleChangeIsPasswordVisible = (value: boolean) => {
+        setIsPasswordVisible(value);
+    }
+
+
+    const handleNavigateToHomeScreen = () => {
+        opacity.value = withTiming(0, { duration: 400, easing: Easing.in(Easing.ease) });
+        setTimeout(() => {
+            navigation.navigate('HomeScreen', { previousScreen: 'LoginScreen' });
+        }, 400);
+    }
+
+    const handleNavigateToRegisterScreen = () => {
+        opacity.value = withTiming(0, { duration: 400, easing: Easing.in(Easing.ease) });
+        setTimeout(() => {
+            navigation.navigate('RegisterScreen', { previousScreen: 'LoginScreen' });
+        }, 400);
+    }
+
+    const handleNavigateFromAnyScreen = () => {
+        opacity.value = withTiming(1, { duration: 400, easing: Easing.in(Easing.ease) });
+    }
+
+    useEffect(() => {
+        console.log(route);
+        if(route.params?.previousScreen){
+            handleNavigateFromAnyScreen();
         }
-    }
+    }, [route]);
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <SafeAreaView style={styles.containerWithBackground}>
-                    <View style={styles.innerContainer}>
+        <Container backgroundColor="#FFF" backgroundColorStatusBar="#FFF">
+            <Animated.View style={[styles.innerContainer, { opacity: opacity }]}>
 
-                        <View style={styles.header}>
-                            <Text style={styles.headerText}>Entrar</Text>
-                        </View>
+                <View style={styles.header}>
+                    <Text style={styles.headerText}>
+                        Entrar
+                    </Text>
+                    <Text style={styles.headerSubtext}>
+                        Insira seus dados e pressione o botão
+                    </Text>
+                </View>
 
-                        <View style={styles.main}>
+                <View style={styles.main}>
 
-                            <Pressable
-                                style={styles.textInputContainer}
-                                onPress={() => { movePlaceholderUp(PlaceholderEmailBottom, textInputEmailRef); }}
-                            >
-                                <User
-                                    size={36}
-                                    color="#A3B1F1"
-                                    style={styles.textInputIcon}
-                                />
-                                <View style={styles.textInputWithPlaceholder}>
-                                    <TextInput
-                                        ref={textInputEmailRef}
-                                        onFocus={() => { movePlaceholderUp(PlaceholderEmailBottom, textInputEmailRef); }}
-                                        onBlur={() => { movePlaceholderDown(PlaceholderEmailBottom, email); }}
-                                        style={[styles.textInput]}
-                                        value={email}
-                                        onChangeText={(value) => { setEmail(value); }}
-                                        cursorColor='#666666'
-                                        underlineColorAndroid='transparent'>
-                                    </TextInput>
-                                    <AnimatedText style={[styles.textInputPlaceholder, { bottom: PlaceholderEmailBottom, }]}>E-mail</AnimatedText>
-                                </View>
-                            </Pressable>
+                    <MyTextInput
+                        icon={<User size={32} color="#A3B1F1" />}
+                        placeholder="E-mail"
+                        value={email}
+                        onChangeText={handleChangeEmail}
+                    />
 
-                            <Pressable
-                                style={styles.textInputContainer}
-                                onPress={() => { movePlaceholderUp(PlaceholderPasswordBottom, textInputPasswordRef); }}
-                            >
-                                <LockKey size={36} style={styles.textInputIcon} color="#A3B1F1" />
-                                <View style={styles.textInputWithPlaceholder}>
-                                    <TextInput
-                                        ref={textInputPasswordRef}
-                                        onFocus={() => { movePlaceholderUp(PlaceholderPasswordBottom, textInputPasswordRef) }}
-                                        onBlur={() => { movePlaceholderDown(PlaceholderPasswordBottom, password); }}
-                                        style={[styles.textInput]}
-                                        value={password}
-                                        onChangeText={(value) => { setPassword(value); }}
-                                        underlineColorAndroid='transparent'
-                                        cursorColor='#666666'
-                                        secureTextEntry={isVisible ? false : true}
-                                    >
+                    <MyTextInput
+                        icon={<LockKey size={32} color="#A3B1F1" />}
+                        placeholder="Senha"
+                        value={password}
+                        onChangeText={handleChangePassword}
+                        secureTextEntry={!isPasswordVisible}
+                    />
 
-                                    </TextInput>
-                                    <AnimatedText style={[styles.textInputPlaceholder, { bottom: PlaceholderPasswordBottom, }]}>Senha</AnimatedText>
-                                </View>
-                            </Pressable>
+                    <MySwitch
+                        value={isPasswordVisible}
+                        onValueChange={handleChangeIsPasswordVisible}
+                    />
 
-                            <View style={styles.passwordVisibility}>
-                                <Switch
-                                    trackColor={{ false: '#333333', true: '#8C9EB9' }}
-                                    thumbColor='#A3B1F1'
-                                    ios_backgroundColor="#333333"
-                                    onValueChange={() => setIsVisible(!isVisible)}
-                                    value={isVisible}
-                                />
-                                <Text style={styles.passwordVisibilityText}>{isVisible ? 'Ocultar senha' : 'Mostrar senha'}</Text>
-                            </View>
-                        </View>
+                    <MyButton
+                        text="Entrar"
+                        onPress={handleNavigateToHomeScreen}
+                    />
 
-                        <View style={styles.footer}>
-                            <Button>
-                                Entrar
-                            </Button>
+                </View>
 
-                            <View style={styles.signIn}>
-                                <Text style={styles.siginFirstText}>Ainda não tem conta?</Text>
-                                <Text style={styles.siginSecondText}>Cadastrar</Text>
-                            </View>
-                            <View style={styles.forgotPassword}>
-                                <Text style={styles.forgotPasswordSubtext}>Esqueceu a senha? </Text>
-                                <Text style={styles.forgotPasswordText}>Recuperar</Text>
+                <View style={styles.footer}>
 
-                            </View>
-
-                        </View>
+                    <View style={styles.captionContainer}>
+                        <Text style={styles.captionLeftText}>
+                            Ainda não tem conta?
+                        </Text>
+                        <TouchableOpacity onPress={handleNavigateToRegisterScreen}>
+                            <Text style={styles.captionRightText}>
+                                Cadastrar
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-                </SafeAreaView>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+                    <View style={styles.captionContainer}>
+                        <Text style={styles.captionLeftText}>
+                            Esqueceu a senha?
+                        </Text>
+                        <TouchableOpacity onPress={handleNavigateToRegisterScreen}>
+                            <Text style={styles.captionRightText}>
+                                Recuperar
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                </View>
+
+            </Animated.View>
+        </Container>
+
     )
 }

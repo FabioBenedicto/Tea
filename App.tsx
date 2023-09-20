@@ -11,7 +11,7 @@ import { HomeScreen } from './src/screens/HomeScreen';
 import { TextScreen } from './src/screens/TextScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { LoginScreen } from './src/screens/LoginScreen';
-import { RegisterScreen } from './src/RegisterScreen';
+import { RegisterScreen } from './src/screens/RegisterScreen';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -28,13 +28,16 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <StatusBar animated/>
+      <StatusBar
+        translucent
+        animated
+      />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
           animation: 'none'
         }}
-        initialRouteName='HomeScreen'
+        initialRouteName='LoginScreen'
       >
         <Stack.Screen
           name='HomeScreen'
@@ -42,13 +45,13 @@ export default function App() {
         <Stack.Screen
           name='TextScreen'
           component={TextScreen} />
-          <Stack.Screen
+        <Stack.Screen
           name='ProfileScreen'
           component={ProfileScreen} />
-           <Stack.Screen
+        <Stack.Screen
           name='LoginScreen'
           component={LoginScreen} />
-          <Stack.Screen
+        <Stack.Screen
           name='RegisterScreen'
           component={RegisterScreen} />
       </Stack.Navigator>

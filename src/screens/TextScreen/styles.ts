@@ -8,14 +8,19 @@ export const styles = StyleSheet.create({
     innerContainer: {
         flex: 1,
         backgroundColor: 'white',
-        paddingTop: 40,
-        paddingHorizontal: 20,
+        paddingHorizontal: 24,
     },
-    backContainer: {
-        marginTop: 40,
+    header: {
+        marginBottom: 40,
+    },
+    back: {
+        marginTop: 24,
+    },
+    main: {
+        gap: 20,
     },
     titleContainer: {
-        marginTop: 30,
+       
     },
     titleText: {
         fontWeight: '700',
@@ -25,7 +30,6 @@ export const styles = StyleSheet.create({
 
     },
     text: {
-        textAlign: 'justify',
-        
+        textAlign: 'justify', 
     }
 });

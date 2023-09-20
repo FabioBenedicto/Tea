@@ -1,15 +1,20 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const styles = StyleSheet.create({
     innerContainer: {
         flex: 1,
         paddingHorizontal: 24,
     },
+    back: {
+        marginTop: 24,
+        justifyContent: 'center',
+    },
     header: {
-        marginTop: 40,
-        marginBottom: 80,
         justifyContent: 'center',
         alignItems: 'center',
+        marginTop: 40,
+        marginBottom: 80,
     },
     headerText: {
         fontFamily: 'Inter_700Bold',
@@ -26,21 +31,18 @@ export const styles = StyleSheet.create({
         marginBottom: 40,
     },
     footer: {
-        gap: 20,
         marginBottom: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    captionContainer: {
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
-    },
-    captionLeftText: {
+    captionText: {
         fontFamily: 'Inter_400Regular',
-        fontSize: 16,
-        color: '#666666'
+        fontSize: 12,
+        color: '#666666',
     },
-    captionRightText: {
+    highlightedCaptionText: {
         fontFamily: 'Inter_700Bold',
-        fontSize: 16,
-        color: '#333333'
-    },
+        fontSize: 12,
+        color: '#333333',
+    }
 });

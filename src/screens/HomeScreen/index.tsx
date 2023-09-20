@@ -1,127 +1,135 @@
-import React, { useState, useRef, useEffect } from "react";
-import { SafeAreaView, View, Text, ScrollView, TouchableOpacity, FlatList, Linking, ColorValue, Pressable } from "react-native";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Linking, Dimensions } from "react-native";
 
-import Animated, { useSharedValue, withTiming, Easing, useAnimatedScrollHandler } from 'react-native-reanimated';
-
-import { MagnifyingGlass, UsersThree, SmileyMeh, SmileyNervous } from 'phosphor-react-native'
+import { Container } from "../../components/Container";
+import { UrgencyButton } from "../../components/UrgencyButton";
+import { VerticalItem } from "../../components/VerticalItem";
+import { HorizontalListItem } from "../../components/HorizontalItem";
 
 import { styles } from "./styles";
-import { VerticalListItem } from "../../components/VerticalListItem";
-import { HorizontalListItem } from "../../components/HorizontalListItem";
-import { getStatusBarHeight } from "react-native-status-bar-height";
-import { setStatusBarHidden, setStatusBarStyle, setStatusBarTranslucent } from "expo-status-bar";
 
-export function HomeScreen() {
-    const navigation = useNavigation();
-    const isFocused = useIsFocused();
-    const [navigatedTo, setNavigatedTo] = useState(false);
+import { MagnifyingGlass, SmileyMeh, SmileyNervous, User } from 'phosphor-react-native'
+import Animated, { useSharedValue, withTiming, Easing, interpolateColor, useAnimatedStyle, withSequence } from 'react-native-reanimated';
 
-    const margin = useSharedValue<any>(-20);
-    const opacity = useSharedValue<any>(1);
-    const scrollY = useSharedValue(0);
+export function HomeScreen({ navigation, route }) {
+    const [isHiding, setIsHiding] = useState<boolean>();
+    const screenHeight = Dimensions.get('screen').height;
+    const margin = useSharedValue<any>(0);
+    const opacityTeste = useSharedValue<any>(0);
+    const animatedValue = useSharedValue<any>(0);
 
-    const [background1, setBackground1] = useState('#A3B1F1');
-    const [background2, setBackground2] = useState('#A3B1F1');
-    const [background3, setBackground3] = useState('#A3B1F1');
-    const [background4, setBackground4] = useState('#A3B1F1');
-
-    const [background, setBackground] = useState('#FF8989');
-
-    const handleCallPress = () => {
+    const handleUrgencyButtonPress = () => {
         const phoneNumber = '1234567890'
         const url = `tel:${phoneNumber}`;
         Linking.openURL(url);
     };
 
-    const handleNavigateTo = (id: Number) => {
-        margin.value = withTiming(-(120 + getStatusBarHeight()), { duration: 400, easing: Easing.out(Easing.linear) });
-        opacity.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.linear) });
-        /*setTimeout(() => {
-            navigation.navigate('TextScreen', id);
-            setNavigatedTo(true);
-        }, 400);*/
+    const handleVerticalItemPress = () => {
+        navigation.navigate('ProfileScreen');
+        setNavigatedTo(true);
     }
 
-    const handleNavigateFrom = () => {
+    const handleHorizontalItemPress = (index: number) => {
+        setIsHiding(true);
+        margin.value = withTiming(-120, { duration: 400, easing: Easing.in(Easing.linear) });
+        //opacity.value = withTiming(0, { duration: 400, easing: Easing.in(Easing.linear) });
+        setTimeout(() => {
+            navigation.navigate('TextScreen', index);
+        }, 400);
+    }
+
+    /*const handleNavigateFromRegisterScreen = () => {
         margin.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.linear) });
         opacity.value = withTiming(1, { duration: 400, easing: Easing.out(Easing.linear) })
+    }*/
+
+    const backgroundColorStyle = useAnimatedStyle(() => {
+        return {
+            backgroundColor: interpolateColor(animatedValue.value, [0, 1], ['#FFFFFF', '#A3B1F1']), // Muda a cor de 0 para 1
+        };
+    });
+
+    const handleNavigateFromRegisterScreen = () => {
+        animatedValue.value = withTiming(1, { duration: 400, easing: Easing.inOut(Easing.ease) });
+        setTimeout(() => {
+            setIsHiding(true);
+            //height.value = withTiming('100%', { duration: 4000, easing: Easing.inOut(Easing.ease) });
+        }, 400);
+        opacityTeste.value = withTiming(0, { duration: 400, easing: Easing.inOut(Easing.ease) });
+        opacityTeste.value = 0;
     }
 
     useEffect(() => {
-        if (isFocused && navigatedTo) {
-            handleNavigateFrom();
+        if (route.params?.previousScreen) {
+            handleNavigateFromRegisterScreen();
         }
-    }, [isFocused, navigatedTo]);
+    }, []);
 
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView onScroll={(event) => {
-                console.log(event.nativeEvent.contentOffset.y);
-                if (event.nativeEvent.contentOffset.y <= 120) {
-                    setStatusBarHidden(false, 'none')
-                } else {
-                    setStatusBarHidden(true, 'none')
-                }
-            }} contentContainerStyle={{ flexGrow: 1, }} bounces={false} showsVerticalScrollIndicator={false}>
+        <Container backgroundColorStatusBar="#A3B1F1" backgroundColor="#FFF">
+            <Animated.View style={[styles.innerContainer, backgroundColorStyle]}>
 
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>TEA</Text>
-                    <Text style={styles.headerSubtitle}>Transtorno do espectro autista </Text>
+                    <Text style={styles.headerText}>
+                        TEA
+                    </Text>
+                    <Text style={styles.headerSubtext}>
+                        Transtorno do espectro autista
+                    </Text>
                 </View>
 
-                <Animated.View style={[styles.containerAnimatedMargin, { marginTop: margin }]}>
-                    <Animated.View style={[styles.containerAnimatedOpacity, { opacity: opacity }]}>
+                <Animated.View style={[styles.containerAnimatedMargin, { marginTop: margin}]}>
+                    <Animated.View style={[styles.containerAnimatedOpacity, { opacity: opacityTeste }]}>
 
+                        <UrgencyButton
+                            onPress={handleUrgencyButtonPress}
+                            isHiding={isHiding}
+                        />
 
-                        <Pressable
-                            onPressIn={() => {
-                                setBackground('#E57A7A')
-                            }}
-                            onPressOut={() => {
-                                setBackground('#FF8989');
-                                handleCallPress();
-                            }}
-                            style={[
-                                styles.urgencyButton,
-                                { backgroundColor: background }
-                            ]}
-                        >
-                            <Text style={styles.urgencyButtonText}>
-                                URGÊNCIA
-                            </Text>
-                        </Pressable>
+                        <Text style={styles.title}>
+                            Tipos de crises
+                        </Text>
 
-                        <Text style={styles.title}>Tipos de crises</Text>
-
-                        <View style={styles.listContainer}>
-                            <HorizontalListItem index={1} onPress={handleNavigateTo} text='Light' icon={<SmileyMeh size={40} weight="regular" />} />
-                            <HorizontalListItem index={2} onPress={handleNavigateTo} text='Heavy' icon={<SmileyNervous size={40} weight="regular" />} />
+                        <View style={styles.HorizontalListContainer}>
+                            <HorizontalListItem
+                                index={1}
+                                icon={<SmileyMeh size={40} weight="fill" />}
+                                text='Light'
+                                onPress={handleHorizontalItemPress}
+                                isHiding={isHiding}
+                            />
+                            <HorizontalListItem
+                                index={2}
+                                icon={<SmileyNervous size={40} weight="fill" />}
+                                text='Heavy'
+                                onPress={handleHorizontalItemPress}
+                                isHiding={isHiding}
+                            />
                         </View>
 
-
-                        <Text style={styles.title}>Informações adicionais</Text>
-
                         <View style={styles.footer}>
-                            <View style={styles.footerItem}>
-                                <View style={styles.footerItemIconBackground}>
-                                    <MagnifyingGlass size={40} weight="light" />
-                                </View>
-                                <Text style={styles.footerItemText}>Como identificar</Text>
-                            </View>
-                            <View style={styles.footerItem}>
-                                <View style={styles.footerItemIconBackground}>
-                                    <UsersThree size={40} weight="light" />
-                                </View>
-                                <Text style={styles.footerItemText}>Sobre nós</Text>
+                            <Text style={styles.title}>Outras Informações</Text>
+
+                            <View style={styles.VerticalListContainer}>
+                                <VerticalItem
+                                    icon={<MagnifyingGlass size={40} weight="light" />}
+                                    text="Como identificar"
+                                    onPress={() => { }}
+                                />
+
+                                <VerticalItem
+                                    icon={<User size={40} weight="light" />}
+                                    text="Minhas informações"
+                                    onPress={handleVerticalItemPress}
+                                />
+
                             </View>
                         </View>
 
                     </Animated.View>
                 </Animated.View>
-
-            </ScrollView>
-        </SafeAreaView>
+            </Animated.View>
+        </Container>
     );
 }

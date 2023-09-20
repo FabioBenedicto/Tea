@@ -5,7 +5,7 @@ import Animated from "react-native-reanimated";
 
 import { styles } from "./styles";
 
-export interface TextInputTeaProps {
+export interface MyTextInputProps {
     icon: ReactNode;
     placeholder: string;
     value: string | undefined;
@@ -13,8 +13,7 @@ export interface TextInputTeaProps {
     secureTextEntry?: boolean | undefined;
 }
 
-export function TextInputTea({ icon, placeholder, value, onChangeText, secureTextEntry }: TextInputTeaProps) {
-    const AnimatedText = Animated.createAnimatedComponent(Text);
+export function MyTextInput({ icon, placeholder, value, onChangeText, secureTextEntry }: MyTextInputProps) {
     const [isFocused, setIsFocused] = useState<boolean>();
 
     const handleFocus = () => {
@@ -22,7 +21,7 @@ export function TextInputTea({ icon, placeholder, value, onChangeText, secureTex
     }
 
     const handleBlur = () => {
-        if(value == ''){
+        if(!value){
             setIsFocused(false);
         } 
     }
