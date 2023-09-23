@@ -9,7 +9,8 @@ export const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 40,
+        marginTop: 40 + getStatusBarHeight(),
+        marginBottom: 40,
     },
     headerText: {
         fontFamily: 'Inter_700Bold',
@@ -26,8 +27,8 @@ export const styles = StyleSheet.create({
         paddingTop: 40,
         paddingHorizontal: 40,
         backgroundColor: 'white',
-        borderTopLeftRadius: 24,
-        borderTopRightRadius: 24,
+        //borderTopLeftRadius: 24,
+        //borderTopRightRadius: 24,
     },
     containerAnimatedOpacity: {
         flex: 1,

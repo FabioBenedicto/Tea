@@ -50,7 +50,8 @@ const handleBlur = () => {
             style={[
                 styles.placeHolder,
                 {
-                    top: isFocused ? -16 : 6,
+                    top: isFocused ? -12 : 6,
+                    fontSize: isFocused ? 16 : 20,
                 }
             ]}
         >

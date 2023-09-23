@@ -1,9 +1,12 @@
 import { StyleSheet } from "react-native";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const styles = StyleSheet.create({
     innerContainer: {
         flex: 1,
         paddingHorizontal: 24,
+        backgroundColor: '#FFFFFF',
+        paddingTop: getStatusBarHeight(),
     },
     header: {
         marginTop: 40,
@@ -30,15 +33,14 @@ export const styles = StyleSheet.create({
         marginBottom: 40,
     },
     captionContainer: {
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
+        alignItems: 'center',
     },
-    captionLeftText: {
+    captionText: {
         fontFamily: 'Inter_400Regular',
         fontSize: 16,
         color: '#666666'
     },
-    captionRightText: {
+    captionSubtext: {
         fontFamily: 'Inter_700Bold',
         fontSize: 16,
         color: '#333333'

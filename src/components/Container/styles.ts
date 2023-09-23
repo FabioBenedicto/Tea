@@ -4,6 +4,8 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+  },
+  innerContainer: {
+    flexGrow: 1,
   }
 });

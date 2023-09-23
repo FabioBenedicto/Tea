@@ -52,6 +52,7 @@ export function MyTextInput({ icon, placeholder, value, onChangeText, secureText
                         styles.placeHolder,
                         {
                             top: isFocused ? -20 : 6,
+                            fontSize: isFocused ? 16 : 20,
                         }
                     ]}
                 >

@@ -8,12 +8,24 @@ export const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: '#A3B1F1',
-        height: 120,
         marginHorizontal: -24,
-        paddingLeft: 24,
+        paddingTop: 40 + getStatusBarHeight(),
+        paddingBottom: 40,
+        paddingHorizontal: 24,
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
-        justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    signOutContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    signOutText: {
+        fontSize: 16,
+        color: '#FF8989',
     },
     main: {
         marginTop: -40,
@@ -63,12 +75,12 @@ export const styles = StyleSheet.create({
         fontSize: 16,
     },
     subtext: {
-        marginLeft: 40,
         marginTop: -30,
     },
     testinho: {
         fontFamily: 'Inter_400Regular',
         fontSize: 12,
+        textAlign: 'center',
     },
     button: {
         backgroundColor: '#FF8989',

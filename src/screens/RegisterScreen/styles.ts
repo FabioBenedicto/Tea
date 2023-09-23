@@ -5,6 +5,8 @@ export const styles = StyleSheet.create({
     innerContainer: {
         flex: 1,
         paddingHorizontal: 24,
+        backgroundColor: '#FFFFFF',
+        paddingTop: getStatusBarHeight(),
     },
     back: {
         marginTop: 24,
@@ -25,6 +27,7 @@ export const styles = StyleSheet.create({
         fontFamily: 'Inter_400Regular',
         fontSize: 16,
         color: '#666666',
+        textAlign: 'center',
     },
     main: {
         gap: 40,
@@ -35,12 +38,18 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    captionContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     captionText: {
         fontFamily: 'Inter_400Regular',
         fontSize: 12,
         color: '#666666',
     },
-    highlightedCaptionText: {
+    captionTextHighlighted: {
         fontFamily: 'Inter_700Bold',
         fontSize: 12,
         color: '#333333',

@@ -10,19 +10,20 @@ import { CaretLeft } from "phosphor-react-native";
 import { useNavigation } from "@react-navigation/native";
 import Animated, { Easing, useSharedValue, withTiming } from "react-native-reanimated";
 
-export function TextScreen({ route }){
+export function TextScreen({ navigation, route }){
 
     const marginTop = useSharedValue<any>(0);
     const opacity = useSharedValue<any>(0);
-
-    const navigation = useNavigation();
 
     useEffect(() => {
         opacity.value = withTiming(1, { duration: 100, easing: Easing.in(Easing.linear) })
     }, [])
 
     const handleBackPress = () => {
-        navigation.navigate('HomeScreen');
+        opacity.value = withTiming(0, { duration: 100, easing: Easing.in(Easing.linear) });
+        setTimeout(() => {
+            navigation.navigate('HomeScreen', {previousScreen: 'TextScreen'});
+        }, 200);
     }
 
     return (
@@ -54,7 +55,7 @@ export function TextScreen({ route }){
                         </View>
                     </View>
 
-                    <Text>{route.params}oi</Text>
+                    <Text>{route.params.previousScreen}oi</Text>
 
                 </Animated.View>
             </Animated.View>

@@ -14,7 +14,7 @@ textInput: {
   borderWidth: 2,
   borderColor: '#A3B1F1',
   borderRadius: 10,
-  padding: 8,
+  padding: 16,
   fontSize: 20,
   height: 120,
   zIndex: 1,

@@ -1,64 +1,70 @@
-import React, { Fragment, ReactNode, useEffect, useState } from 'react';
-import { SafeAreaView, KeyboardAvoidingView, View, TouchableWithoutFeedback, ScrollView, Platform, Keyboard, LayoutChangeEvent } from 'react-native'
+import React, { ReactNode, useState } from 'react';
+import {
+  SafeAreaView,
+  KeyboardAvoidingView,
+  View,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Platform,
+  Keyboard
+} from 'react-native'
 
 import { styles } from './styles';
-import { setStatusBarBackgroundColor, setStatusBarHidden } from 'expo-status-bar';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export interface ContainerProps {
-  children?: ReactNode | undefined;
-  backgroundColorStatusBar?: string | undefined;
+export interface ContainerProps extends InnerContainerProps {
   backgroundColor?: string | undefined;
+  isKeyboardSupported?: boolean | undefined;
 }
 
-export function Container({children, backgroundColor, backgroundColorStatusBar} : ContainerProps ) {
-  const [pressin, setPressin] = useState<any>();
-  const [pressout, setPressout] = useState<any>();
-  const padding = useSafeAreaInsets().top;
+export interface InnerContainerProps {
+  children?: ReactNode | undefined;
+}
 
-  const handleOnPressIn = () => {
+export function Container({ children, backgroundColor, isKeyboardSupported }: ContainerProps) {
+  return (
+    <View style={[styles.container, { backgroundColor }]}>
+      {
+        isKeyboardSupported
+          ? <ContainerWithKeyboardSupport>
+            {children}
+          </ContainerWithKeyboardSupport>
+          : <ContainerWithoutKeyboardSupport>
+            {children}
+          </ContainerWithoutKeyboardSupport>
+      }
+    </View>
+  );
+}
 
-  }
-
-  const handleOnPressOut = () => {
-    
-  }
-
-  useEffect(() => {
-    if(backgroundColorStatusBar){
-      setStatusBarBackgroundColor(backgroundColorStatusBar, true);
-    }
-  }, [])
+function ContainerWithKeyboardSupport({ children }: InnerContainerProps) {
+  const [pressinLocation, setPressinLocation] = useState<any>();
 
   return (
-    <Fragment>
-    <SafeAreaView style={{ flex: 0, backgroundColor: backgroundColorStatusBar }} />
-    <SafeAreaView style={{flex: 1, backgroundColor}}>
-      <KeyboardAvoidingView
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <TouchableWithoutFeedback
         style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <TouchableWithoutFeedback 
-        style={{flex: 1}}
-        onPressIn={(event) => setPressin(event.nativeEvent.locationY)} 
-        onPressOut={(event) => {if( event.nativeEvent.locationY == pressin){
-          Keyboard.dismiss;
-        }}}>
-          <ScrollView 
-          style={{flex: 1}} 
-          bounces={false} 
-          showsVerticalScrollIndicator={false} 
-          contentContainerStyle={{flexGrow: 1}}
-          >
-            <View style={[styles.container, {
-              paddingTop: Platform.OS == 'android' ? padding : null,
-            }]}>
-            {children}
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
-    </Fragment>
+        onPressIn={(event) => setPressinLocation(event.nativeEvent.locationY)}
+        onPressOut={(event) => { if (event.nativeEvent.locationY == pressinLocation) Keyboard.dismiss; }}>
+        <ContainerWithoutKeyboardSupport>
+          {children}
+        </ContainerWithoutKeyboardSupport>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
+  );
+}
+
+function ContainerWithoutKeyboardSupport({ children }: InnerContainerProps) {
+  return (
+    <ScrollView
+      style={styles.container}
+      bounces={false}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.innerContainer}
+    >
+      {children}
+    </ScrollView>
   );
 }
